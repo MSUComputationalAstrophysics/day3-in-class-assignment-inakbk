@@ -1,36 +1,32 @@
 #in-class 3
 
 from pylab import *
-from scipy import interpolate
+from scipy import optimize
 
-
-def breaking_function(x):
-
+def breaking_function1(x):
+	return sin(x)*x**6
 
 #interval
-a = 
-b = 
+a = -10
+b = 10
+#guess
+x0 = 1
 
 x = linspace(a, b, 1000)
-
-
-#pre-class code:
+f = breaking_function1
+plot(x, f(x), 'b')
 
 #scipy methods:
-y_sci_lin = interpolate.interp1d(ip.all_x, ip.all_f_of_x, kind='linear')
-y_sci_nearest = interpolate.interp1d(ip.all_x, ip.all_f_of_x, kind='nearest')
-y_sci_cubic = interpolate.interp1d(ip.all_x, ip.all_f_of_x, kind='cubic')
+r_bisect = optimize.bisect(f, a, b)
+r_newt = optimize.newton(f, x0)
+r_brent = optimize.brentq(f, a, b)
 
-figure(1)
-plot(x, y_sci_lin(x), 'm--') #scipy lin
-plot(x, y_sci_nearest(x), 'k-') #scipy nearest (zero'th order)
-plot(x, y_sci_cubic(x), 'y--') #scipy lin
+print 'roots:', r_bisect, r_newt, r_brent
 
-plot(ip.all_x, ip.all_f_of_x, 'rx') #data
-plot(x, ip.analytic_func(x), 'g') #analytical
+plot(r_bisect, f(r_bisect), 'ro')
+plot(r_brent, f(r_brent), 'ko')
+plot(r_newt, f(r_newt), 'go')
 
-legend(['scipy linear ip', 'scipy nearest ip', 'scipy cubic ip', 'given data points', 'analytical function'])
-xlabel('x')
-ylabel('y')
-title('Interpolation')
+legend(['function', 'bisection', 'brents', 'newtons'])
+
 show()
